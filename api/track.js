@@ -25,7 +25,7 @@ app.get("/api/track", async (req, res) => {
     // Launch Puppeteer with Chromium's executable path
     browser = await puppeteer.launch({
       headless: true,
-      executablePath: chromium.executablePath(), // Call the function to get the path
+      executablePath: chromium.executablePath(), // Call the function to get the path as a string
       args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });
 
