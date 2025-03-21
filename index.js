@@ -18,10 +18,10 @@ app.get("/api/track", async (req, res) => {
     let browser;
 
     try {
-        browser = await puppeteer.launch({
-            headless: true,  // ✅ Optimized for Railway deployment
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
-        });
+   const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+});
 
         const page = await browser.newPage();
         await page.setUserAgent(
