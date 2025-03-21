@@ -77,4 +77,11 @@ app.get("/api/track", async (req, res) => {
   }
 });
 
+// Use the environment's port if available (Render, Heroku, etc.)
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
 module.exports = app;
