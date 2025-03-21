@@ -1,6 +1,6 @@
-const express = require("express");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+const express = require("express");
 const cors = require("cors");
 
 puppeteer.use(StealthPlugin());
@@ -18,11 +18,18 @@ app.get("/api/track", async (req, res) => {
     let browser;
 
     try {
-        // Launch Puppeteer with the correct executable path
+        // Attempt to use the PUPPETEER_EXECUTABLE_PATH environment variable if defined
+        const chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || null;
+
         browser = await puppeteer.launch({
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/google-chrome-stable", // Use Render's Chrome path
-            headless: "new", // Recommended headless mode
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            executablePath: chromePath, // Try to use custom path from environment variable
+            headless: "new", // Use the latest headless option
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-gpu", // Optional for headless environments
+                "--single-process", // Optional for headless environments
+            ],
         });
 
         const page = await browser.newPage();
@@ -45,7 +52,7 @@ app.get("/api/track", async (req, res) => {
                 date: event.querySelector(".event-time strong")?.innerText.trim() || "N/A",
                 time: event.querySelector(".event-time span")?.innerText.trim() || "N/A",
                 status: event.querySelector(".event-content strong")?.innerText.trim() || "N/A",
-                courier: event.querySelector(".carrier")?.innerText.trim() || "N/A"
+                courier: event.querySelector(".carrier")?.innerText.trim() || "N/A",
             }));
         });
 
@@ -58,7 +65,7 @@ app.get("/api/track", async (req, res) => {
                 destination: getText(".parcel-attributes tr:nth-child(3) .value span:nth-child(2)"),
                 courier: getText(".parcel-attributes tr:nth-child(4) .value a"),
                 days_in_transit: getText(".parcel-attributes tr:nth-child(6) .value span"),
-                tracking_link: getText(".tracking-link input")
+                tracking_link: getText(".tracking-link input"),
             };
         });
 
@@ -68,7 +75,7 @@ app.get("/api/track", async (req, res) => {
 
         res.json({
             tracking_details: trackingEvents,
-            parcel_info: parcelInfo
+            parcel_info: parcelInfo,
         });
 
     } catch (error) {
@@ -79,6 +86,5 @@ app.get("/api/track", async (req, res) => {
     }
 });
 
-// ✅ Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
