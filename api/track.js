@@ -3,7 +3,11 @@ const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const express = require("express");
 const cors = require("cors");
 
-puppeteer.use(StealthPlugin()); // Use Stealth Plugin
+// Use Stealth Plugin
+puppeteer.use(StealthPlugin());
+
+// Import Chromium from sparticuz
+const chromium = require("@sparticuz/chromium");
 
 const app = express();
 app.use(cors());
@@ -18,8 +22,10 @@ app.get("/api/track", async (req, res) => {
   let browser;
 
   try {
+    // Launch Puppeteer with Chromium's executable path
     browser = await puppeteer.launch({
       headless: true,
+      executablePath: chromium.executablePath, // Use the correct executable path
       args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });
 
