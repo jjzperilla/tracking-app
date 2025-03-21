@@ -2,6 +2,6 @@ services:
   - type: web
     name: track-parcel-api
     env: node
+    buildCommand: npm install
+    startCommand: npm start
     plan: free
-    buildCommand: "npm install"
-    startCommand: "npm start"
