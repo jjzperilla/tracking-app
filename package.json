@@ -11,6 +11,8 @@
     "puppeteer-extra": "^3.1.19",
     "puppeteer-extra-plugin-stealth": "^2.11.0",
     "cors": "^2.8.5",
-    "@sparticuz/chromium": "^112.0.0"
+    "@sparticuz/chromium": "^112.0.0",
+"puppeteer-core": "^19.0.0",
+"puppeteer-extra": "^3.1.19"
   }
 }
